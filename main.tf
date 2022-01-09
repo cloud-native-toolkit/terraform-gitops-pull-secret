@@ -17,7 +17,7 @@ module setup_clis {
 
 resource null_resource create_secret {
   provisioner "local-exec" {
-    command = "${path.module}/scripts/create-yaml.sh '${local.name}' '${local.yaml_dir}'"
+    command = "${path.module}/scripts/create-yaml.sh '${local.name}' '${local.secret_dir}'"
 
     environment = {
       BIN_DIR  = module.setup_clis.bin_dir
