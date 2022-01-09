@@ -1,0 +1,8 @@
+id: github.com/cloud-native-toolkit/terraform-gitops-pull-secret
+name: gitops-pull-secret
+type: gitops
+description: Module to populate a gitops repo with the resources to provision pull-secret
+tags:
+  - tools
+  - gitops
+versions: []
