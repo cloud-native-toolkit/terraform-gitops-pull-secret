@@ -6,6 +6,13 @@ MODULE_DIR=$(cd "${SCRIPT_DIR}/.."; pwd -P)
 NAME="$1"
 DEST_DIR="$2"
 
-## Add logic here to put the yaml resource content in DEST_DIR
+mkdir -p "${DEST_DIR}"
 
-find "${DEST_DIR}" -name "*"
+kubectl create secret docker-registry \
+  "${NAME}" \
+  --docker-server="${SERVER}" \
+  --docker-username="${USERNAME}" \
+  --docker-password="${PASSWORD}" \
+  --dry-run=client \
+  -o yaml \
+  > "${DEST_DIR}/secret.yaml"
