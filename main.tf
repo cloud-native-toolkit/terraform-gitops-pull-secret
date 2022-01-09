@@ -3,7 +3,7 @@ locals {
   bin_dir       = module.setup_clis.bin_dir
   secret_dir    = "${path.cwd}/.tmp/${local.name}/secrets"
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/sealed-secrets"
-  secret_name   = "${var.username}-${lower(var.server)}"
+  secret_name   = "${var.docker_username}-${lower(var.docker_server)}"
   layer = "infrastructure"
   type  = "base"
   application_branch = "main"
