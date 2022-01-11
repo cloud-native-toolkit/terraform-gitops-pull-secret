@@ -70,7 +70,6 @@ variable "namespace" {
 variable "kubeseal_cert" {
   type        = string
   description = "The certificate/public key used to encrypt the sealed secrets"
-  default     = ""
 }
 
 variable "server_name" {
@@ -78,3 +77,20 @@ variable "server_name" {
   description = "The name of the server"
   default     = "default"
 }
+
+variable "docker_server" {
+  type        = string
+  description = "The location of the container registry"
+}
+
+variable "docker_username" {
+  type        = string
+  description = "The username for the container registry"
+}
+
+variable "docker_password" {
+  type        = string
+  description = "The password for the container registry"
+  sensitive   = true
+}
+
