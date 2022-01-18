@@ -1,7 +1,7 @@
 
 output "secret_name" {
   description = "The name of the secret that was created"
-  value       = local.secret_name
+  value       = var.secret_name
   depends_on  = [null_resource.setup_gitops]
 }
 
