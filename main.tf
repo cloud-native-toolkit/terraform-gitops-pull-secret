@@ -1,9 +1,8 @@
 locals {
-  name          = local.secret_name
+  name          = "${var.docker_username}-${lower(var.docker_server)}"
   bin_dir       = module.setup_clis.bin_dir
   secret_dir    = "${path.cwd}/.tmp/${local.name}/secrets"
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/sealed-secrets"
-  secret_name   = "${var.docker_username}-${lower(var.docker_server)}"
   layer = "infrastructure"
   type  = "base"
   application_branch = "main"
@@ -17,7 +16,7 @@ module setup_clis {
 
 resource null_resource create_secret {
   provisioner "local-exec" {
-    command = "${path.module}/scripts/create-yaml.sh '${local.name}' '${var.namespace}' '${local.secret_dir}'"
+    command = "${path.module}/scripts/create-yaml.sh '${var.secret_name}' '${var.namespace}' '${local.secret_dir}'"
 
     environment = {
       BIN_DIR  = module.setup_clis.bin_dir
