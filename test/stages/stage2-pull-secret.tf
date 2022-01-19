@@ -9,4 +9,5 @@ module "gitops_module" {
   docker_server = "docker.io"
   docker_username = "test"
   docker_password = "password"
+  secret_name = "my-test-secret"
 }
