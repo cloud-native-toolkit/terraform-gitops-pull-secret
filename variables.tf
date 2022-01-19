@@ -97,5 +97,5 @@ variable "docker_password" {
 variable "secret_name" {
   type        = string
   description = "The name of the secret"
-  default     = "dockerpull"
+  default     = ""
 }

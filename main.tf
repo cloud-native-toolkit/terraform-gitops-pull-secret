@@ -8,6 +8,7 @@ locals {
   application_branch = "main"
   namespace = var.namespace
   layer_config = var.gitops_config[local.layer]
+  secret_name   = var.secret_name != "" ? var.secret_name : local.name
 }
 
 module setup_clis {
@@ -16,7 +17,7 @@ module setup_clis {
 
 resource null_resource create_secret {
   provisioner "local-exec" {
-    command = "${path.module}/scripts/create-yaml.sh '${var.secret_name}' '${var.namespace}' '${local.secret_dir}'"
+    command = "${path.module}/scripts/create-yaml.sh '${local.secret_name}' '${var.namespace}' '${local.secret_dir}'"
 
     environment = {
       BIN_DIR  = module.setup_clis.bin_dir
