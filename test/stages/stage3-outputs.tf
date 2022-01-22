@@ -12,3 +12,9 @@ resource local_file write_outputs {
     type        = module.gitops_module.type
   })
 }
+
+resource local_file write_secret_name {
+  filename = ".secret_name"
+
+  content = module.gitops_module.secret_name
+}

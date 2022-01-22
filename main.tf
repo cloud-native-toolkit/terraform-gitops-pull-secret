@@ -1,14 +1,14 @@
 locals {
-  name          = local.secret_name
+  name          = "${var.docker_username}-${lower(var.docker_server)}"
   bin_dir       = module.setup_clis.bin_dir
   secret_dir    = "${path.cwd}/.tmp/${local.name}/secrets"
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/sealed-secrets"
-  secret_name   = "${var.docker_username}-${lower(var.docker_server)}"
   layer = "infrastructure"
   type  = "base"
   application_branch = "main"
   namespace = var.namespace
   layer_config = var.gitops_config[local.layer]
+  secret_name   = var.secret_name != "" ? var.secret_name : local.name
 }
 
 module setup_clis {
@@ -17,7 +17,7 @@ module setup_clis {
 
 resource null_resource create_secret {
   provisioner "local-exec" {
-    command = "${path.module}/scripts/create-yaml.sh '${local.name}' '${var.namespace}' '${local.secret_dir}'"
+    command = "${path.module}/scripts/create-yaml.sh '${local.secret_name}' '${var.namespace}' '${local.secret_dir}'"
 
     environment = {
       BIN_DIR  = module.setup_clis.bin_dir
@@ -42,12 +42,34 @@ module seal_secrets {
 resource null_resource setup_gitops {
   depends_on = [module.setup_clis, module.seal_secrets]
 
+  triggers = {
+    name = local.name
+    namespace = var.namespace
+    yaml_dir = local.yaml_dir
+    server_name = var.server_name
+    layer = local.layer
+    type = local.type
+    git_credentials = yamlencode(var.git_credentials)
+    gitops_config   = yamlencode(var.gitops_config)
+    bin_dir = local.bin_dir
+  }
+
   provisioner "local-exec" {
-    command = "${local.bin_dir}/igc gitops-module '${local.name}' -n '${var.namespace}' --contentDir '${local.yaml_dir}' --serverName '${var.server_name}' -l '${local.layer}' --type '${local.type}' --debug"
+    command = "${self.triggers.bin_dir}/igc gitops-module '${self.triggers.name}' -n '${self.triggers.namespace}' --contentDir '${self.triggers.yaml_dir}' --serverName '${self.triggers.server_name}' -l '${self.triggers.layer}' --type '${self.triggers.type}'"
 
     environment = {
-      GIT_CREDENTIALS = yamlencode(var.git_credentials)
-      GITOPS_CONFIG   = yamlencode(var.gitops_config)
+      GIT_CREDENTIALS = nonsensitive(self.triggers.git_credentials)
+      GITOPS_CONFIG   = self.triggers.gitops_config
+    }
+  }
+
+  provisioner "local-exec" {
+    when = destroy
+    command = "${self.triggers.bin_dir}/igc gitops-module '${self.triggers.name}' -n '${self.triggers.namespace}' --delete --contentDir '${self.triggers.yaml_dir}' --serverName '${self.triggers.server_name}' -l '${self.triggers.layer}' --type '${self.triggers.type}' --debug"
+
+    environment = {
+      GIT_CREDENTIALS = nonsensitive(self.triggers.git_credentials)
+      GITOPS_CONFIG   = self.triggers.gitops_config
     }
   }
 }

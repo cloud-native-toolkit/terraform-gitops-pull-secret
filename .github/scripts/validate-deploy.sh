@@ -14,6 +14,8 @@ SERVER_NAME=$(jq -r '.server_name // "default"' gitops-output.json)
 LAYER=$(jq -r '.layer_dir // "2-services"' gitops-output.json)
 TYPE=$(jq -r '.type // "base"' gitops-output.json)
 
+SECRET_NAME=$(cat .secret_name)
+
 mkdir -p .testrepo
 
 git clone https://${GIT_TOKEN}@${GIT_REPO} .testrepo
@@ -54,7 +56,6 @@ else
 fi
 
 
-SECRET_NAME="${COMPONENT_NAME}"
 count=0
 until kubectl get secret "${SECRET_NAME}" -n "${NAMESPACE}" || [[ $count -eq 20 ]]; do
   echo "Waiting for secret/${SECRET_NAME} in ${NAMESPACE}"

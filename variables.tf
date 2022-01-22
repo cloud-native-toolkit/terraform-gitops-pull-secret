@@ -60,6 +60,7 @@ variable "git_credentials" {
     token = string
   }))
   description = "The credentials for the gitops repo(s)"
+  sensitive = true
 }
 
 variable "namespace" {
@@ -94,3 +95,8 @@ variable "docker_password" {
   sensitive   = true
 }
 
+variable "secret_name" {
+  type        = string
+  description = "The name of the secret"
+  default     = ""
+}
