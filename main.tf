@@ -1,5 +1,5 @@
 locals {
-  name          = local.secret_name
+  name          = local.default_secret_name
   bin_dir       = module.setup_clis.bin_dir
   secret_dir    = "${path.cwd}/.tmp/${local.name}/secrets"
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/sealed-secrets"
