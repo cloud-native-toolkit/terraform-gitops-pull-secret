@@ -1,5 +1,5 @@
 locals {
-  name          = "${var.docker_username}-${lower(var.docker_server)}"
+  name          = local.secret_name
   bin_dir       = module.setup_clis.bin_dir
   secret_dir    = "${path.cwd}/.tmp/${local.name}/secrets"
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/sealed-secrets"
@@ -8,7 +8,8 @@ locals {
   application_branch = "main"
   namespace = var.namespace
   layer_config = var.gitops_config[local.layer]
-  secret_name   = var.secret_name != "" ? var.secret_name : local.name
+  default_secret_name = replace(replace("${var.docker_username}-${lower(var.docker_server)}", "/[^a-z0-9-.]/", "-"), "/-+/", "-")
+  secret_name   = var.secret_name != "" ? var.secret_name : local.default_secret_name
 }
 
 module setup_clis {

@@ -7,7 +7,7 @@ module "gitops_module" {
   namespace = module.gitops_namespace.name
   kubeseal_cert = module.gitops.sealed_secrets_cert
   docker_server = "docker.io"
-  docker_username = "test"
+  docker_username = "test||value"
   docker_password = "password"
   secret_name = "my-test-secret"
 }
