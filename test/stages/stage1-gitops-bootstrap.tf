@@ -9,5 +9,6 @@ module "gitops-bootstrap" {
   sealed_secret_cert  = module.cert.cert
   sealed_secret_private_key = module.cert.private_key
   prefix              = var.bootstrap_prefix
+  kubeseal_namespace  = var.kubeseal_namespace
   create_webhook      = true
 }
