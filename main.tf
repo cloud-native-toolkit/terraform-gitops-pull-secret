@@ -43,14 +43,16 @@ module seal_secrets {
   label         = local.name
 }
 
-
 resource gitops_module module {
+  depends_on = [module.seal_secrets]
+
   name        = local.name
   namespace   = var.namespace
   content_dir = local.yaml_dir
   server_name = var.server_name
   layer       = local.layer
   type        = local.type
+  branch      = local.application_branch
   config      = yamlencode(var.gitops_config)
   credentials = yamlencode(var.git_credentials)
 }
