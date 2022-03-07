@@ -9,7 +9,7 @@ DEST_DIR="$3"
 
 mkdir -p "${DEST_DIR}"
 
-kubectl create secret docker-registry \
+${BIN_DIR}/kubectl create secret docker-registry \
   "${NAME}" \
   -n "${NAMESPACE}" \
   --docker-server="${SERVER}" \
