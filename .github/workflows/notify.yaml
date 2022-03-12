@@ -8,4 +8,4 @@ jobs:
   notify:
     uses: cloud-native-toolkit/action-workflows/.github/workflows/notify.yaml@v1
     secrets:
-      GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      TOKEN: ${{ secrets.TOKEN }}
