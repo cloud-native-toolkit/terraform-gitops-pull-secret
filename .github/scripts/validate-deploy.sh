@@ -6,6 +6,17 @@ GIT_TOKEN=$(cat git_token)
 export KUBECONFIG=$(cat .kubeconfig)
 NAMESPACE=$(cat .namespace)
 
+BIN_DIR=$(cat .bin_dir)
+
+export PATH="${BIN_DIR}:${PATH}"
+
+if ! command -v oc 1> /dev/null 2> /dev/null; then
+  echo "oc cli not found" >&2
+  exit 1
+fi
+
+command -v oc
+
 cat gitops-output.json
 
 COMPONENT_NAME=$(jq -r '.name // "my-module"' gitops-output.json)
@@ -41,7 +52,7 @@ echo "Printing payload/${LAYER}/namespace/${NAMESPACE}/${COMPONENT_NAME}/secret.
 cat "payload/${LAYER}/namespace/${NAMESPACE}/${COMPONENT_NAME}/secret.yaml"
 
 count=0
-until kubectl get namespace "${NAMESPACE}" 1> /dev/null 2> /dev/null || [[ $count -eq 20 ]]; do
+until oc get namespace "${NAMESPACE}" 1> /dev/null 2> /dev/null || [[ $count -eq 20 ]]; do
   echo "Waiting for namespace: ${NAMESPACE}"
   count=$((count + 1))
   sleep 15
@@ -57,7 +68,7 @@ fi
 
 
 count=0
-until kubectl get secret "${SECRET_NAME}" -n "${NAMESPACE}" || [[ $count -eq 20 ]]; do
+until oc get secret "${SECRET_NAME}" -n "${NAMESPACE}" || [[ $count -eq 20 ]]; do
   echo "Waiting for secret/${SECRET_NAME} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 15
@@ -65,7 +76,7 @@ done
 
 if [[ $count -eq 20 ]]; then
   echo "Timed out waiting for secret/${SECRET_NAME} in ${NAMESPACE}"
-  kubectl get secret -n "${NAMESPACE}"
+  oc get secret -n "${NAMESPACE}"
   exit 1
 fi
 
