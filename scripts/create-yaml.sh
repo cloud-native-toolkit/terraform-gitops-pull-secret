@@ -3,13 +3,19 @@
 SCRIPT_DIR=$(cd $(dirname "$0"); pwd -P)
 MODULE_DIR=$(cd "${SCRIPT_DIR}/.."; pwd -P)
 
+export PATH="${BIN_DIR}:${PATH}"
+
+if ! command -v kubectl 1> /dev/null 2> /dev/null; then
+  echo "kubectl cli not found"
+fi
+
 NAME="$1"
 NAMESPACE="$2"
 DEST_DIR="$3"
 
 mkdir -p "${DEST_DIR}"
 
-${BIN_DIR}/kubectl create secret docker-registry \
+kubectl create secret docker-registry \
   "${NAME}" \
   -n "${NAMESPACE}" \
   --docker-server="${SERVER}" \
