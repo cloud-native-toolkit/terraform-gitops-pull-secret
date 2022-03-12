@@ -27,6 +27,6 @@ jobs:
 
   release:
     needs: [verify, verifyMetadata]
-    uses: cloud-native-toolkit/action-workflows/.github/workflows/verify-gitops-module.yaml@v1
+    uses: cloud-native-toolkit/action-workflows/.github/workflows/release-module.yaml@v1
     secrets:
-      TOKEN: ${{ secrets.TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
