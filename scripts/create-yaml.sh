@@ -6,7 +6,8 @@ MODULE_DIR=$(cd "${SCRIPT_DIR}/.."; pwd -P)
 export PATH="${BIN_DIR}:${PATH}"
 
 if ! command -v kubectl 1> /dev/null 2> /dev/null; then
-  echo "kubectl cli not found"
+  echo "kubectl cli not found" >&2
+  exit 1
 fi
 
 NAME="$1"
