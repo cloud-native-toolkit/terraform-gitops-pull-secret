@@ -4,6 +4,7 @@ GIT_REPO=$(cat git_repo)
 GIT_TOKEN=$(cat git_token)
 
 export KUBECONFIG=$(cat .kubeconfig)
+echo "KUBECONFIG: ${KUBECONFIG}"
 NAMESPACE=$(cat .namespace)
 
 BIN_DIR=$(cat .bin_dir)
