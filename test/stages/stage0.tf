@@ -6,7 +6,7 @@ terraform {
   }
 }
 
-module setup_clis {
+module setup_clis2 {
   source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
 
   bin_dir = "${path.cwd}/test_bin_dir"
