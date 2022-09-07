@@ -5,7 +5,6 @@ module "dev_cluster" {
   login_user = "apikey"
   login_password = var.ibmcloud_api_key
   login_token = ""
-  ingress_subdomain = var.ingress_subdomain
 }
 
 resource null_resource output_kubeconfig {
