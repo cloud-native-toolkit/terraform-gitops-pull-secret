@@ -85,7 +85,3 @@ variable "git_username" {
 variable "kubeseal_namespace" {
   default = "sealed-secrets"
 }
-
-variable "ingress_subdomain" {
-  default = ""
-}

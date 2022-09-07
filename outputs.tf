@@ -2,36 +2,41 @@
 output "secret_name" {
   description = "The name of the secret that was created"
   value       = local.secret_name
-  depends_on  = [gitops_module.module]
+  depends_on  = [null_resource.setup_gitops]
 }
 
 output "name" {
   description = "The name of the module"
-  value       = gitops_module.module.name
+  value       = local.name
+  depends_on  = [null_resource.setup_gitops]
 }
 
 output "branch" {
   description = "The branch where the module config has been placed"
   value       = local.application_branch
-  depends_on  = [gitops_module.module]
+  depends_on  = [null_resource.setup_gitops]
 }
 
 output "namespace" {
   description = "The namespace where the module will be deployed"
-  value       = gitops_module.module.namespace
+  value       = local.namespace
+  depends_on  = [null_resource.setup_gitops]
 }
 
 output "server_name" {
   description = "The server where the module will be deployed"
-  value       = gitops_module.module.server_name
+  value       = var.server_name
+  depends_on  = [null_resource.setup_gitops]
 }
 
 output "layer" {
   description = "The layer where the module is deployed"
-  value       = gitops_module.module.layer
+  value       = local.layer
+  depends_on  = [null_resource.setup_gitops]
 }
 
 output "type" {
   description = "The type of module where the module is deployed"
-  value       = gitops_module.module.type
+  value       = local.type
+  depends_on  = [null_resource.setup_gitops]
 }
